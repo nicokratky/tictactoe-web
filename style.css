@@ -10,12 +10,17 @@ h1 {
     text-align: center;
 }
 
+h1#main-heading {
+    display: none;
+}
+
 table {
     border-spacing: 0;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     top: 200px;
+    display: none;
 }
 
 .cell {
@@ -32,4 +37,28 @@ table {
 
 #c4, #c5, #c6, #c7, #c8, #c9 {
     border-top: none;
+}
+
+.options {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 200px;
+}
+
+.option {
+    width: 100px;
+    height: 100px;
+    border: 10px solid #333;
+    margin: 20px;
+    display: inline-block;
+}
+
+#option1 {
+    background: #e74c3c;
+    margin-right: 20px;
+}
+
+#option2 {
+    background: #3498db;
 }
