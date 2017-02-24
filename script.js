@@ -28,9 +28,9 @@ $(document).ready(function() {
 });
 
 var board = [
-    1, 2, 3,
-    4, 5, 6,
-    7, 8, 9
+    0, 1, 2,
+    3, 4, 5,
+    6, 7, 8
 ];
 
 var human = 'X';
@@ -64,4 +64,17 @@ function move(element, player, color) {
     else {
         console.log('Cell ' + id + ' is occupied!');
     }
+}
+
+function winning(board, player) {
+    if((board[0] == player && board[1] == player && board[2] == player) ||
+        (board[3] == player && board[4] == player && board[5] == player) ||
+        (board[6] == player && board[7] == player && board[8] == player) ||
+        (board[0] == player && board[3] == player && board[6] == player) ||
+        (board[1] == player && board[4] == player && board[7] == player) ||
+        (board[2] == player && board[5] == player && board[8] == player) ||
+        (board[0] == player && board[4] == player && board[8] == player) ||
+        (board[2] == player && board[4] == player && board[6] == player))
+        return true;
+    return false;
 }
