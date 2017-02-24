@@ -52,13 +52,27 @@ function move(element, player, color) {
         if(winning(board, player)) {
             alert('YOU WIN!');
             reset();
+            return;
         }
         else if(round > 8) {
             alert('TIE!');
             reset();
+            return;
         }
         else {
-            // TODO
+            round++;
+            var index = minimax(board, ai);
+            var selector = '#' + index;
+            $(selector).css('background', aiColor);
+
+            board[index] = ai;
+
+            if(winning(board, ai)) {
+                alert('YOU LOSE!');
+                reset();
+                return;
+            }
+
         }
     }
     else {
@@ -66,15 +80,51 @@ function move(element, player, color) {
     }
 }
 
-function winning(board, player) {
-    if((board[0] == player && board[1] == player && board[2] == player) ||
-        (board[3] == player && board[4] == player && board[5] == player) ||
-        (board[6] == player && board[7] == player && board[8] == player) ||
-        (board[0] == player && board[3] == player && board[6] == player) ||
-        (board[1] == player && board[4] == player && board[7] == player) ||
-        (board[2] == player && board[5] == player && board[8] == player) ||
-        (board[0] == player && board[4] == player && board[8] == player) ||
-        (board[2] == player && board[4] == player && board[6] == player))
+function winning(_board, player) {
+    if((_board[0] == player && _board[1] == player && _board[2] == player) ||
+        (_board[3] == player && _board[4] == player && _board[5] == player) ||
+        (_board[6] == player && _board[7] == player && _board[8] == player) ||
+        (_board[0] == player && _board[3] == player && _board[6] == player) ||
+        (_board[1] == player && _board[4] == player && _board[7] == player) ||
+        (_board[2] == player && _board[5] == player && _board[8] == player) ||
+        (_board[0] == player && _board[4] == player && _board[8] == player) ||
+        (_board[2] == player && _board[4] == player && _board[6] == player))
         return true;
     return false;
+}
+
+function reset() {
+    round = 0;
+    board = [
+        0, 1, 2,
+        3, 4, 5,
+        6, 7, 8
+    ];
+}
+
+var iteration = 0;
+function minimax(_board, player) {
+    var av = available(_board);
+
+    if(winning(_board, human)) {
+        return {
+            score: -10
+        };
+    }
+    else if(winning(_board, ai)) {
+        return {
+            score: 10
+        };
+    }
+    else if(av.length == 0) {
+        return {
+            score: 0
+        };
+    }
+
+    var moves = [];
+}
+
+function available(_board) {
+    return _board.filter(s => (s != human && s != ai));
 }
