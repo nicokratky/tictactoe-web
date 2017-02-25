@@ -29,6 +29,7 @@ table {
     border: 10px solid #333;
     padding: 0;
     margin: 0;
+    background: transparent;
 }
 
 #c1, #c2, #c4, #c5, #c7, #c8 {
