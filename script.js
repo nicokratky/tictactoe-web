@@ -4,8 +4,6 @@ $(document).ready(function() {
         humanColor = '#e74c3c';
         aiColor = '#3498db';
 
-        console.log("Human player chose RED!");
-
         $('#question, .options').css('display', 'none');
         $('#main-heading, table').css('display', 'block');
     });
@@ -14,15 +12,12 @@ $(document).ready(function() {
         humanColor = '#3498db';
         aiColor = '#e74c3c';
 
-        console.log('Human player chose BLUE!');
-
         $('#question, .options').css('display', 'none');
         $('#main-heading, table').css('display', 'block');
     });
 
     $('td.cell').click(function() {
         move(this, human, humanColor);
-        console.log('Human player clicked cell ' + this.id.substring(1));
     });
 
 });
@@ -50,33 +45,36 @@ function move(element, player, color) {
         $(element).css('background', color);
 
         if(winning(board, player)) {
-            alert('YOU WIN!');
-            reset();
+            setTimeout(function() {
+                alert('YOU WIN!');
+                reset();
+            }, 300);
             return;
         }
         else if(round > 8) {
-            alert('TIE!');
-            reset();
+            setTimeout(function() {
+                alert('TIE!');
+                reset();
+            }, 300);
             return;
         }
         else {
             round++;
-            var index = minimax(board, ai);
-            var selector = '#' + index;
+            var index = minimax(board, ai).index;
+            var selector = '#c' + index;
             $(selector).css('background', aiColor);
 
             board[index] = ai;
 
             if(winning(board, ai)) {
-                alert('YOU LOSE!');
-                reset();
+                setTimeout(function() {
+                    alert('YOU LOSE!');
+                    reset();
+                }, 300);
                 return;
             }
 
         }
-    }
-    else {
-        console.log('Cell ' + id + ' is occupied!');
     }
 }
 
@@ -100,9 +98,9 @@ function reset() {
         3, 4, 5,
         6, 7, 8
     ];
+    $('.cell').css('background', 'transparent');
 }
 
-var iteration = 0;
 function minimax(_board, player) {
     var av = available(_board);
 
@@ -123,6 +121,47 @@ function minimax(_board, player) {
     }
 
     var moves = [];
+    for(var i = 0; i < av.length; i++) {
+        var move = {
+            index: _board[av[i]]
+        };
+
+        _board[av[i]] = player;
+
+        var mm;
+        if(player == ai)
+            mm = minimax(_board, human);
+        else
+            mm = minimax(_board, ai);
+
+        move.score = mm.score;
+        _board[av[i]] = move.index;
+        moves.push(move);
+    }
+
+    var bestMove, bestScore;
+    if(player == ai) {
+        bestScore = -99999;
+
+        for(var i = 0; i < moves.length; i++) {
+            if(moves[i].score > bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    }
+    else {
+        bestScore = 99999;
+
+        for(var i = 0; i < moves.length; i++) {
+            if(moves[i].score < bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    }
+
+    return moves[bestMove];
 }
 
 function available(_board) {
